@@ -1,0 +1,1 @@
+web: gunicorn dctraffic_project.wsgi --log-file -
