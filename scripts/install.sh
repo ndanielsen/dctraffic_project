@@ -17,6 +17,7 @@ pip install -r requirements.txt
 # setup db and allow django to access it
 sudo su
 sudo -u postgres createdb traffic
+sudo -u postgres psql template1 -a -f scripts/template_db_setup.sql
 sudo -u postgres psql traffic -a -f scripts/db_setup.sql
 sudo cp scripts/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
 service postgresql restart
