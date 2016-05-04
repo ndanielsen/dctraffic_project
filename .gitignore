@@ -1,6 +1,9 @@
 venv
 htmlcov
+.cache/
+.coverage
 *.pyc
 staticfiles
 .vagrant
 *.sqlite3
+*.egg-info
