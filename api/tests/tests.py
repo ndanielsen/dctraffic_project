@@ -6,7 +6,7 @@ from factory.fuzzy import BaseFuzzyAttribute
 from faker import Faker
 import pytest
 
-from .models import ParkingViolation
+from api.models import ParkingViolation
 
 pytestmark = pytest.mark.django_db
 
