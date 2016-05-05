@@ -48,4 +48,4 @@ class Command(BaseCommand):
                         )
                 obj.save()
 
-            self.stdout.write(self.style.SUCCESS('All Loaded'))
+            self.stdout.write(self.style.SUCCESS('Loaded %s' % self.parking_file))

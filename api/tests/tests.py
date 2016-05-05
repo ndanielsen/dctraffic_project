@@ -90,15 +90,29 @@ class ParkingViolationTest(TestCase):
 
 from api.management.commands import load_dc_data
 from django.conf import settings
+import sys
 
 @pytest.mark.django_db
-def test_load_parking_fixtures():
+def test_load_parking_fixtures(capsys):
     cmd = load_dc_data.Command
     cmd = cmd()
     cmd.parking_file = os.path.join(settings.BASE_DIR, 'api/fixtures/parking_violations_fixture.csv')
+    # add test to assert that parking is an expected positional argument
     args = {'parking': True}
     cmd.execute(**args)
     assert cmd.parking_file == os.path.join(settings.BASE_DIR, 'api/fixtures/parking_violations_fixture.csv')
-
     all_violations = ParkingViolation.objects.all()
     assert len(all_violations) == 4
+    out, err = capsys.readouterr()
+    assert out == 'Loaded %s\n' % cmd.parking_file
+
+
+from django import apps
+
+def test_api_app_registered():
+    assert 'api' in settings.INSTALLED_APPS
+
+from api.apps import ApiConfig
+
+def test_api_appconfig():
+    assert ApiConfig.name == 'api'
