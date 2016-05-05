@@ -106,6 +106,10 @@ def test_load_parking_fixtures(capsys):
     out, err = capsys.readouterr()
     assert out == 'Loaded %s\n' % cmd.parking_file
 
+    #check attributes
+    first_violation = all_violations[0]
+    assert first_violation.filename == 'Parking_Violations_in_July_2011.csv'
+
 
 from django import apps
 
