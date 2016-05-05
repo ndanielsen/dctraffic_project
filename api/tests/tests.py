@@ -1,3 +1,4 @@
+import os
 from django.test import TestCase
 from django.contrib.gis.geos import Point
 
@@ -80,3 +81,24 @@ class ParkingViolationTest(TestCase):
         # Check attributes
         self.assertEqual(only_violation.body_style, 'TK')
         self.assertEqual(only_violation.rp_plate_state, 'MD')
+
+    def test_create_multiple_violations(self):
+        # Check we can find it
+        self.violation2 = ParkingViolationFactory()
+        all_violations = ParkingViolation.objects.all()
+        self.assertEqual(len(all_violations), 2)
+
+from api.management.commands import load_dc_data
+from django.conf import settings
+
+@pytest.mark.django_db
+def test_load_parking_fixtures():
+    cmd = load_dc_data.Command
+    cmd = cmd()
+    cmd.parking_file = os.path.join(settings.BASE_DIR, 'api/fixtures/parking_violations_fixture.csv')
+    args = {'parking': True}
+    cmd.execute(**args)
+    assert cmd.parking_file == os.path.join(settings.BASE_DIR, 'api/fixtures/parking_violations_fixture.csv')
+
+    all_violations = ParkingViolation.objects.all()
+    assert len(all_violations) == 4
