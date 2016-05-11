@@ -88,7 +88,8 @@ class ParkingViolationTest(TestCase):
         all_violations = ParkingViolation.objects.all()
         self.assertEqual(len(all_violations), 2)
 
-from api.management.commands import load_dc_data
+from pytest import fixture
+from api.management.commands import load_dc_data, initial_load
 from django.conf import settings
 import sys
 
@@ -104,19 +105,26 @@ def test_load_parking_fixtures(capsys):
     all_violations = ParkingViolation.objects.all()
     assert len(all_violations) == 4
     out, err = capsys.readouterr()
-    assert out == 'Loaded %s\n' % cmd.parking_file
+    assert out == 'Loading %s\nLoaded %s\n' % (cmd.parking_file, cmd.parking_file)
 
     #check attributes
     first_violation = all_violations[0]
     assert first_violation.filename == 'Parking_Violations_in_July_2011.csv'
 
-
-from django import apps
-
-def test_api_app_registered():
-    assert 'api' in settings.INSTALLED_APPS
+# from django import apps
+#
+# def test_api_app_registered():
+#     assert 'api' in settings.INSTALLED_APPS
+#     assert 'rest_framework' in settings.INSTALLED_APPS
+#     assert 'rest_framework_gis' in settings.INSTALLED_APPS
 
 from api.apps import ApiConfig
 
 def test_api_appconfig():
     assert ApiConfig.name == 'api'
+
+from django.contrib import admin
+from api.admin import ParkingViolationAdmin
+
+# def test_admin_registered():
+#     assert isinstance(ParkingViolationAdmin, admin.options.ModelAdmin )

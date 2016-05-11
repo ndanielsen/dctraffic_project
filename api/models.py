@@ -11,7 +11,7 @@ class ParkingViolation(models.Model):
 
     location = models.PointField()
     objectid = models.IntegerField()
-    rowid = models.IntegerField()
+    rowid = models.IntegerField(unique=True)
     holiday = models.BooleanField()
     violation_code = models.CharField(max_length=10)
     violation_description = models.CharField(max_length=256)
@@ -26,4 +26,4 @@ class ParkingViolation(models.Model):
     ticket_issue_datetime = models.DateTimeField()
 
     def __str__(self):
-        return self.ticket_issue_datetime
+        return str(self.ticket_issue_datetime)
